@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
+import org.testng.Assert;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -200,7 +201,7 @@ public class ActionManager {
     @SneakyThrows
     public void selectDropDownFieldWithValue(String elementDropDownField, String fieldValue) {
         String passMessage = "Opened drop down field [" + elementDropDownField + "] and select value [" + fieldValue + "]";
-        String failMessage = "Can not open drop down field [" + elementDropDownField + "] and select value [" + fieldValue + "]";
+        String failMessage = "Can't open dropdown [" + elementDropDownField + "] and select [" + fieldValue + "]";
         try {
             elementHighlightAuto(findElement(elementDropDownField));
             Select workingDropDownField = new Select(findElement(elementDropDownField));
@@ -221,10 +222,10 @@ public class ActionManager {
     public Select getDropDownOptionsList(String elementDropDownField) {
         return new Select(findElement(elementDropDownField));
     }
-
-    public void assertEqual(String objectName, String expected, String actual) throws IOException {
+    @SneakyThrows
+    public void assertEqual(String objectName, String expected, String actual) {
         String passMessage = "Assert object [" + objectName + "] passed because expected value: [" + expected + "] is equal with actual value: [" + actual + "]";
-        String failMessage = "Assertion failed [" + objectName + "] expected: [" + expected + "] not equal actual: [" + actual + "]";
+        String failMessage = "[" + objectName + "] expected: [" + expected + "] not equal actual: [" + actual + "]";
         System.out.println("Compare value [" + expected + "] is equal with: [" + actual + "]");
         try {
             assertEquals(expected, actual);
@@ -235,6 +236,23 @@ public class ActionManager {
                     .fail(HTMLReporter.getHtmlReporter().markupFailedText(failMessage))
                     .addScreenCaptureFromPath(HTMLReporter.getHtmlReporter().takesScreenshot(driver, failMessage));
             System.out.println(failMessage);
+        }
+    }
+
+    public void assertElementNotExist(String elementLocator){
+        String passMessage = "Element [" + elementLocator + "] not exist anymore";
+        String failMessage = "Element [" + elementLocator + "] still exist";
+        System.out.println("Check element [" + elementLocator + "] not exist anymore");
+        try{
+            findElement(elementLocator);
+            HTMLReporter.getCurrentReportNode()
+                    .fail(HTMLReporter.getHtmlReporter().markupFailedText(failMessage))
+                    .addScreenCaptureFromPath(HTMLReporter.getHtmlReporter().takesScreenshot(driver, failMessage));
+            System.out.println(failMessage);
+        }catch (NoSuchElementException | IOException e){
+            Assert.assertTrue(true);
+            HTMLReporter.getCurrentReportNode().pass(passMessage);
+            System.out.println(passMessage);
         }
     }
 }

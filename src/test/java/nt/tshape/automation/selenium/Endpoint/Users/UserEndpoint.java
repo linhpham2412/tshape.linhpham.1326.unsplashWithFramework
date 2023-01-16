@@ -20,7 +20,7 @@ public class UserEndpoint extends UniversalEndpoint {
 
     @SneakyThrows
     public UserEndpoint callGETRequest() {
-        sendGETRequest(UserEndpoint.class);
+        sendGETRequest(getBaseHost(), UserEndpoint.class);
         return this;
     }
 
@@ -48,7 +48,7 @@ public class UserEndpoint extends UniversalEndpoint {
 
     @SneakyThrows
     public UserEndpoint callPostToUserEndpointRequestWithBodyAndSaveCreatedUserId() {
-        sendPostRequestWithBody(UserEndpoint.class);
+        sendPostRequestWithBody(getBaseHost(), UserEndpoint.class);
         UsersDataModel createdUser = super.convertResponseToObject(UsersDataModel.class);
         getTestContext().setAttribute("UserID", createdUser.id);
         return this;

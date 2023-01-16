@@ -135,8 +135,8 @@ public class UniversalEndpoint {
     }
 
     @SneakyThrows
-    private <T> void executeRequestTypeWithBody(String requestType, String requestBody, Class<T> objectClass) {
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(getBaseHost()).newBuilder();
+    private <T> void executeRequestTypeWithBody(String host, String requestType, String requestBody, Class<T> objectClass) {
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(host).newBuilder();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         try {
             Request request = null;
@@ -179,20 +179,20 @@ public class UniversalEndpoint {
         }
     }
 
-    protected <T> void sendGETRequest(Class<T> objectClass) {
-        executeRequestTypeWithBody("GET", "", objectClass);
+    protected <T> void sendGETRequest(String host,Class<T> objectClass) {
+        executeRequestTypeWithBody(host,"GET", "", objectClass);
     }
 
-    protected <T> void sendPostRequestWithBody(Class<T> objectClass) {
-        executeRequestTypeWithBody("POST", requestJSON.toString(), objectClass);
+    protected <T> void sendPostRequestWithBody(String host,Class<T> objectClass) {
+        executeRequestTypeWithBody(host,"POST", requestJSON.toString(), objectClass);
     }
 
-    protected <T> void sendPutRequestWithBody(Class<T> objectClass) {
-        executeRequestTypeWithBody("PUT", requestJSON.toString(), objectClass);
+    protected <T> void sendPutRequestWithBody(String host,Class<T> objectClass) {
+        executeRequestTypeWithBody(host,"PUT", requestJSON.toString(), objectClass);
     }
 
-    protected <T> void sendDeleteRequest(Class<T> objectClass) {
-        executeRequestTypeWithBody("DELETE", "", objectClass);
+    protected <T> void sendDeleteRequest(String host,Class<T> objectClass) {
+        executeRequestTypeWithBody(host,"DELETE", "", objectClass);
     }
 
     @SneakyThrows

@@ -20,7 +20,7 @@ public class UserIdEndpoint extends UniversalEndpoint {
 
     public UserIdEndpoint callGETRequestBySavedUserId(){
         super.changeEndpointPathParameterNameWithValue("{id}",getTestContext().getAttributeByName("UserID"), UserIdEndpoint.class);
-        super.sendGETRequest(UserIdEndpoint.class);
+        super.sendGETRequest(getBaseHost(), UserIdEndpoint.class);
         return this;
     }
 
@@ -37,13 +37,13 @@ public class UserIdEndpoint extends UniversalEndpoint {
 
     public UserIdEndpoint callUPDATERequestBySavedUserId(){
         super.changeEndpointPathParameterNameWithValue("{id}",getTestContext().getAttributeByName("UserID"), UserIdEndpoint.class);
-        super.sendPutRequestWithBody(UserIdEndpoint.class);
+        super.sendPutRequestWithBody(getBaseHost(), UserIdEndpoint.class);
         return this;
     }
 
     public UserIdEndpoint callDELETERequestBySavedUserId(){
         super.changeEndpointPathParameterNameWithValue("{id}",getTestContext().getAttributeByName("UserID"), UserIdEndpoint.class);
-        super.sendDeleteRequest(UserIdEndpoint.class);
+        super.sendDeleteRequest(getBaseHost(), UserIdEndpoint.class);
         return this;
     }
 
