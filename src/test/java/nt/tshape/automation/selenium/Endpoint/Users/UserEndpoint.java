@@ -1,6 +1,7 @@
 package nt.tshape.automation.selenium.Endpoint.Users;
 
 import nt.tshape.automation.apimanager.UniversalEndpoint;
+import nt.tshape.automation.config.ConfigLoader;
 import nt.tshape.automation.selenium.TestContext;
 import lombok.SneakyThrows;
 import nt.tshape.automation.selenium.DataModel.UsersDataModel;
@@ -16,11 +17,12 @@ public class UserEndpoint extends UniversalEndpoint {
     public UserEndpoint(TestContext testContext) {
         super(testContext);
         setEndpointPath(endpointPath);
+        setBaseHost(ConfigLoader.getEnvironment("apiHost"));
     }
 
     @SneakyThrows
     public UserEndpoint callGETRequest() {
-        sendGETRequest(getBaseHost(), UserEndpoint.class);
+        sendGETRequest(UserEndpoint.class);
         return this;
     }
 
@@ -48,7 +50,7 @@ public class UserEndpoint extends UniversalEndpoint {
 
     @SneakyThrows
     public UserEndpoint callPostToUserEndpointRequestWithBodyAndSaveCreatedUserId() {
-        sendPostRequestWithBody(getBaseHost(), UserEndpoint.class);
+        sendPostRequestWithBody(UserEndpoint.class);
         UsersDataModel createdUser = super.convertResponseToObject(UsersDataModel.class);
         getTestContext().setAttribute("UserID", createdUser.id);
         return this;

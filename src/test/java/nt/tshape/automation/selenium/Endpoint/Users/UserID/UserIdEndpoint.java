@@ -1,6 +1,7 @@
 package nt.tshape.automation.selenium.Endpoint.Users.UserID;
 
 import nt.tshape.automation.apimanager.UniversalEndpoint;
+import nt.tshape.automation.config.ConfigLoader;
 import nt.tshape.automation.selenium.Endpoint.Users.UserEndpoint;
 import nt.tshape.automation.selenium.TestContext;
 import lombok.SneakyThrows;
@@ -16,11 +17,12 @@ public class UserIdEndpoint extends UniversalEndpoint {
     public UserIdEndpoint(TestContext testContext){
         super(testContext);
         setEndpointPath(endpointPath);
+        setBaseHost(ConfigLoader.getEnvironment("apiHost"));
     }
 
     public UserIdEndpoint callGETRequestBySavedUserId(){
         super.changeEndpointPathParameterNameWithValue("{id}",getTestContext().getAttributeByName("UserID"), UserIdEndpoint.class);
-        super.sendGETRequest(getBaseHost(), UserIdEndpoint.class);
+        super.sendGETRequest(UserIdEndpoint.class);
         return this;
     }
 
@@ -37,13 +39,13 @@ public class UserIdEndpoint extends UniversalEndpoint {
 
     public UserIdEndpoint callUPDATERequestBySavedUserId(){
         super.changeEndpointPathParameterNameWithValue("{id}",getTestContext().getAttributeByName("UserID"), UserIdEndpoint.class);
-        super.sendPutRequestWithBody(getBaseHost(), UserIdEndpoint.class);
+        super.sendPutRequestWithBody(UserIdEndpoint.class);
         return this;
     }
 
     public UserIdEndpoint callDELETERequestBySavedUserId(){
         super.changeEndpointPathParameterNameWithValue("{id}",getTestContext().getAttributeByName("UserID"), UserIdEndpoint.class);
-        super.sendDeleteRequest(getBaseHost(), UserIdEndpoint.class);
+        super.sendDeleteRequest(UserIdEndpoint.class);
         return this;
     }
 
