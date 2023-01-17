@@ -1,11 +1,13 @@
 package nt.tshape.automation.apimanager;
 
-import nt.tshape.automation.config.ConfigLoader;
-import nt.tshape.automation.selenium.Constant;
-import nt.tshape.automation.selenium.TestContext;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
+import nt.tshape.automation.config.ConfigLoader;
+import nt.tshape.automation.selenium.Constant;
+import nt.tshape.automation.selenium.TestContext;
 import okhttp3.*;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,9 +23,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static nt.tshape.automation.reportmanager.HTMLReporter.getCurrentReportNode;
 import static nt.tshape.automation.reportmanager.HTMLReporter.getHtmlReporter;
-import static java.util.stream.Collectors.toList;
 
 public class UniversalEndpoint {
     private String baseHost;
@@ -87,6 +89,9 @@ public class UniversalEndpoint {
     protected Response getResponse() {
         return response;
     }
+    protected String getResponseBody() {
+        return responseBody;
+    }
 
     private Boolean isResponseCodeEquals(int responseCode) {
         return response.code() == responseCode;
@@ -135,8 +140,8 @@ public class UniversalEndpoint {
     }
 
     @SneakyThrows
-    private <T> void executeRequestTypeWithBody(String host, String requestType, String requestBody, Class<T> objectClass) {
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(host).newBuilder();
+    private <T> void executeRequestTypeWithBody(String requestType, String requestBody, Class<T> objectClass) {
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(getBaseHost()).newBuilder();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         try {
             Request request = null;
@@ -179,26 +184,31 @@ public class UniversalEndpoint {
         }
     }
 
-    protected <T> void sendGETRequest(String host,Class<T> objectClass) {
-        executeRequestTypeWithBody(host,"GET", "", objectClass);
+    protected <T> void sendGETRequest(Class<T> objectClass) {
+        executeRequestTypeWithBody("GET", "", objectClass);
     }
 
-    protected <T> void sendPostRequestWithBody(String host,Class<T> objectClass) {
-        executeRequestTypeWithBody(host,"POST", requestJSON.toString(), objectClass);
+    protected <T> void sendPostRequestWithBody(Class<T> objectClass) {
+        executeRequestTypeWithBody("POST", requestJSON.toString(), objectClass);
     }
 
-    protected <T> void sendPutRequestWithBody(String host,Class<T> objectClass) {
-        executeRequestTypeWithBody(host,"PUT", requestJSON.toString(), objectClass);
+    protected <T> void sendPutRequestWithBody(Class<T> objectClass) {
+        executeRequestTypeWithBody("PUT", requestJSON.toString(), objectClass);
     }
 
-    protected <T> void sendDeleteRequest(String host,Class<T> objectClass) {
-        executeRequestTypeWithBody(host,"DELETE", "", objectClass);
+    protected <T> void sendDeleteRequest(Class<T> objectClass) {
+        executeRequestTypeWithBody("DELETE", "", objectClass);
     }
 
     @SneakyThrows
     protected <T> T convertResponseToObject(Class<T> objectClass) {
         Gson gson = new Gson();
         return objectClass.cast(gson.fromJson(responseBody, objectClass));
+    }
+
+    protected List<?> convertResponseToListObjects() throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(getResponseBody(), new TypeReference<List<?>>() {});
     }
 
     protected JSONObject convertResponseToJSONObject() {
