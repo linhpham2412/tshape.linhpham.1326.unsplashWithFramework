@@ -1,0 +1,17 @@
+{
+  "environment": "dev",
+  "dev": {
+    "url": "https://www.saucedemo.com/inventory.html",
+    "apiHost": "https://reqres.in/",
+    "unsplashURL": "https://unsplash.com/",
+    "unsplashHost": "https://api.unsplash.com/",
+    "unsplashBearerToken": "JOBGij-pPyH8Sc27g6WR5xVFCn24LwVlXRXGvlGzWzw",
+    "unsplashAccount": "linhpham2412",
+    "unsplashEmail": "blue.linhpham2412@gmail.com",
+    "unsplashPassword": "AutomationTesting101"
+  },
+  "test": {
+    "url": "http://automationpractice.com/index.php",
+    "apiHost": "https://reqres.in/"
+  }
+}
