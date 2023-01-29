@@ -5,10 +5,10 @@
     "apiHost": "https://reqres.in/",
     "unsplashURL": "https://unsplash.com/",
     "unsplashHost": "https://api.unsplash.com/",
-    "unsplashBearerToken": "uO4VPySaFzhvjuLX0vInE9bOK2ujQt56Aucnru_Tjjg",
+    "unsplashBearerToken": "CphXWVBqQv5Mh0jN8EBLPuUmZ7H1hLHTzQg4YIt8K0c",
     "unsplashAccount": "linhpham2412",
     "unsplashEmail": "blue.linhpham2412@gmail.com",
-    "unsplashPassword": "AutomationTesting101"
+    "unsplashPassword": "AutomationTesting102"
   },
   "test": {
     "url": "http://automationpractice.com/index.php",

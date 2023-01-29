@@ -2,6 +2,7 @@ package nt.tshape.automation.apimanager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
@@ -212,7 +213,7 @@ public class UniversalEndpoint {
     }
 
     protected JSONObject convertResponseToJSONObject() {
-        return new JSONObject(responseBody);
+        return new JSONObject(responseBody.trim().substring(0,responseBody.length()-1).substring(1,responseBody.length()-1));
     }
 
     protected JSONObject convertStringToJSONObject(String valueToConvert) {

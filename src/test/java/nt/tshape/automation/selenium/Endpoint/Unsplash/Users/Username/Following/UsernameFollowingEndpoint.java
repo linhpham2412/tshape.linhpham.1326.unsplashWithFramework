@@ -1,12 +1,12 @@
 package nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Following;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import nt.tshape.automation.apimanager.UniversalEndpoint;
 import nt.tshape.automation.config.ConfigLoader;
 import nt.tshape.automation.selenium.DataModel.FollowingDataModel;
 import nt.tshape.automation.selenium.TestContext;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class UsernameFollowingEndpoint extends UniversalEndpoint {
 
@@ -20,13 +20,20 @@ public class UsernameFollowingEndpoint extends UniversalEndpoint {
         unsplashBearerToken = "Bearer "+ConfigLoader.getEnvironment("unsplashBearerToken");
     }
 
-
-    public void callGETRequestToFollowingEndpointToGetListOfFollowings() throws JsonProcessingException {
+    public UsernameFollowingEndpoint callGETRequestToFollowingEndpointToGetListOfFollowings() throws IOException {
         super.addHeader("Authorization",unsplashBearerToken, UsernameFollowingEndpoint.class);
+        super.addHeader("Accept-Version","v1", UsernameFollowingEndpoint.class);
         setBaseHost(unsplashHost);
         endpointPath = endpointPath.replaceAll("%username%",ConfigLoader.getEnvironment("unsplashAccount"));
         setEndpointPath(endpointPath);
         sendGETRequest(UsernameFollowingEndpoint.class);
-        List<FollowingDataModel> followingDataModelList = (List<FollowingDataModel>) convertResponseToListObjects();
+        ArrayList<FollowingDataModel> followingDataModelList = (ArrayList<FollowingDataModel>) convertResponseToListObjects();
+        getTestContext().setContextObjectsWithName("FollowingList",followingDataModelList);
+        return this;
+    }
+    //Verify
+    public UsernameFollowingEndpoint verifyUsernameFollowingResponseCodeShouldBe(int expectedCode){
+        super.verifyEndpointResponseCodeEqual(expectedCode, UsernameFollowingEndpoint.class);
+        return this;
     }
 }
