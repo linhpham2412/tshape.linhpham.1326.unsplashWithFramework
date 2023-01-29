@@ -169,11 +169,19 @@ public class ActionManager {
     }
 
     public void waitForElementVisible(String elementToBeWait) {
-        wait.until(ExpectedConditions.visibilityOf(findElement(elementToBeWait)));
+        try {
+            wait.until(ExpectedConditions.visibilityOf(findElement(elementToBeWait)));
+        } catch (StaleElementReferenceException staleElementReferenceException) {
+            waitForElementVisible(elementToBeWait);
+        }
     }
 
     public void waitForElementClickable(String elementToBeWait) {
-        wait.until(ExpectedConditions.elementToBeClickable(findElement(elementToBeWait)));
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(findElement(elementToBeWait)));
+        } catch (StaleElementReferenceException staleElementReferenceException) {
+            waitForElementClickable(elementToBeWait);
+        }
     }
 
     @SneakyThrows
@@ -189,6 +197,28 @@ public class ActionManager {
             System.out.println(passMessage);
         } catch (StaleElementReferenceException staleElementReferenceException) {
             mouseMoveToElementAndClick(elementMovingToAndClick);
+        } catch (Exception e) {
+            HTMLReporter.getCurrentReportNode()
+                    .fail(HTMLReporter.getHtmlReporter().markupFailedText(failMessage))
+                    .addScreenCaptureFromPath(HTMLReporter.getHtmlReporter().takesScreenshot(driver, failMessage));
+            System.out.println(failMessage);
+            throw e;
+        }
+    }
+
+    @SneakyThrows
+    public void mouseHoverToElement(String elementMovingTo) {
+        String passMessage = "Hovered on element [" + elementMovingTo + "]";
+        String failMessage = "Cannot hover on element [" + elementMovingTo + "]";
+        try {
+            elementHighlightAuto(findElement(elementMovingTo));
+            Actions actions = new Actions(driver);
+            actions.moveToElement(findElement(elementMovingTo));
+            actions.build().perform();
+            HTMLReporter.getCurrentReportNode().pass(passMessage);
+            System.out.println(passMessage);
+        } catch (StaleElementReferenceException staleElementReferenceException) {
+            mouseMoveToElementAndClick(elementMovingTo);
         } catch (Exception e) {
             HTMLReporter.getCurrentReportNode()
                     .fail(HTMLReporter.getHtmlReporter().markupFailedText(failMessage))
@@ -222,6 +252,16 @@ public class ActionManager {
     public Select getDropDownOptionsList(String elementDropDownField) {
         return new Select(findElement(elementDropDownField));
     }
+
+    public void waitForShortTime() throws InterruptedException {
+        synchronized (this){
+            while (true){
+                this.wait(1000);
+                break;
+            }
+        }
+    }
+
     @SneakyThrows
     public void assertEqual(String objectName, String expected, String actual) {
         String passMessage = "Assert object [" + objectName + "] passed because expected value: [" + expected + "] is equal with actual value: [" + actual + "]";
@@ -242,7 +282,7 @@ public class ActionManager {
     public void assertElementNotExist(String elementLocator){
         String passMessage = "Element [" + elementLocator + "] not exist anymore";
         String failMessage = "Element [" + elementLocator + "] still exist";
-        System.out.println("Check element [" + elementLocator + "] not exist anymore");
+        System.out.println("Check is element [" + elementLocator + "] not exist?");
         try{
             findElement(elementLocator);
             HTMLReporter.getCurrentReportNode()
@@ -253,6 +293,22 @@ public class ActionManager {
             Assert.assertTrue(true);
             HTMLReporter.getCurrentReportNode().pass(passMessage);
             System.out.println(passMessage);
+        }
+    }
+
+    public void assertElementExist(String elementLocator) throws IOException {
+        String passMessage = "Element [" + elementLocator + "] exist!";
+        String failMessage = "Element [" + elementLocator + "] not exist";
+        System.out.println("Check is element [" + elementLocator + "] exist?");
+        try{
+            findElement(elementLocator);
+            HTMLReporter.getCurrentReportNode().pass(passMessage);
+            System.out.println(passMessage);
+        }catch (NoSuchElementException e){
+            HTMLReporter.getCurrentReportNode()
+                    .fail(HTMLReporter.getHtmlReporter().markupFailedText(failMessage))
+                    .addScreenCaptureFromPath(HTMLReporter.getHtmlReporter().takesScreenshot(driver, failMessage));
+            System.out.println(failMessage);
         }
     }
 }
