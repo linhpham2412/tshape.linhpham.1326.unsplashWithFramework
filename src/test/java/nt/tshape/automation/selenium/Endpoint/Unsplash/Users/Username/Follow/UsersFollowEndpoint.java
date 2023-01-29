@@ -32,6 +32,7 @@ public class UsersFollowEndpoint extends UniversalEndpoint {
             endpointPath = endpointPath.replaceAll("%username%", followingDataModels.get(i).username);
             setEndpointPath(endpointPath);
             sendDeleteRequest(UsersFollowEndpoint.class);
+            endpointPath = endpointPath.replaceAll(followingDataModels.get(i).username,"%username%");
         }
         return this;
     }
