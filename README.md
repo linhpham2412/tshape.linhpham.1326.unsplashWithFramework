@@ -4,21 +4,15 @@ Test Application: https://unsplash.com
 
 API documentation: https://unsplash.com/documentation
 
-{
-"access_token": "WyXyJC6h2QgzRTq8vDi9c4trI4m9ch2t59xe6xLrvow",
-"token_type": "Bearer",
-"refresh_token": "ByiucrMiUVecutp91so9NE6WO3j4hyTqc186v6AWTqE",
-"scope": "public",
-"created_at": 1673870353
-}
-
-{
-"access_token": "_-JFw2d0et218AC_e1G1dN15OkhRFl1AEYZMd4XO4Jg",
-"token_type": "Bearer",
-"refresh_token": "TD8kP2EZ2H5OHsyvHzCe2txKNxB8DNHavfIJKWLIs3A",
-"scope": "public read_user write_user read_photos write_photos write_likes write_followers read_collections write_collections",
-"created_at": 1673870678
-}
+how to get access OAUTH token
+1. go to https://unsplash.com/oauth/applications
+2. create your app
+3. open your app
+4. save access key and secrete key
+5. input urn:ietf:wg:oauth:2.0:oob into redirect uri
+6. click authorize to get code
+7. send POST request https://unsplash.com/oauth/token?client_id="AccessKey"&client_secret="ScreteKey"&redirect_uri=urn:ietf:wg:oauth:2.0:oob&code="CodeGenerated"&grant_type=authorization_code
+8. save the access_token value as OAUTH token for api (only 1 success return for each code)
 
 Test scenarios:
 
