@@ -32,7 +32,11 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
                 .clickLoginButton()
                 .openUnsplashLoginPage()
                 .verifyLoginPageTitleDisplayCorrect("Login | Unsplash")
-                .loginWithUsernameAndPasswordAndReturnToHomePage(ConfigLoader.getEnvironment("unsplashEmail"), ConfigLoader.getEnvironment("unsplashPassword"), unsplashHomePage)
-                .verifyLoginButtonNotExist();
+                .loginWithUsernameAndPasswordAndReturnToHomePage(ConfigLoader.getEnvironment("unsplashEmail"),
+                        ConfigLoader.getEnvironment("unsplashPassword"), unsplashHomePage)
+                .verifyLoginButtonNotExist()
+                .clickOnTopLeftImageBlock()
+                .hoverToUserProfilePictureAndClickFollowButton()
+                .verifyFollowButtonChangeToFollowing();
     }
 }

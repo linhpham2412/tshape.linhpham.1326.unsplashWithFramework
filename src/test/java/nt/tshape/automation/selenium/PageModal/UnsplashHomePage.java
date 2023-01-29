@@ -3,9 +3,9 @@ package nt.tshape.automation.selenium.PageModal;
 import nt.tshape.automation.config.ConfigLoader;
 import nt.tshape.automation.selenium.ActionManager;
 import nt.tshape.automation.selenium.TestContext;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
+
+import java.io.IOException;
 
 public class UnsplashHomePage extends ActionManager {
 
@@ -17,6 +17,10 @@ public class UnsplashHomePage extends ActionManager {
 
     //Locator
     private final String headerMenuButtonByName = "xpath=//a[contains(text(),'%s')]";
+    private final String imageBlock = "xpath=//figure[(@itemprop='image')]";
+    private final String userProfileModal = "xpath=//div[contains(@class,'ReactModal__Content')]";
+    private final String userProfilePicture = "xpath=//div[contains(@class,'ReactModal__Content')]//img";
+    private final String userProfileFollowButton = "xpath=//button[contains(@title,'%s')]";
 
     //Function
     public UnsplashHomePage openUnsplashHomePage(){
@@ -30,10 +34,31 @@ public class UnsplashHomePage extends ActionManager {
         return new UnsplashLoginPage(driver,getTestContext());
     }
 
+    public UnsplashHomePage clickOnTopLeftImageBlock(){
+        waitForElementVisible(imageBlock);
+        click(imageBlock);
+        return this;
+    }
+
+    public UnsplashHomePage hoverToUserProfilePictureAndClickFollowButton() throws InterruptedException {
+        waitForElementVisible(userProfileModal);
+        mouseHoverToElement(userProfilePicture);
+        waitForShortTime();
+        waitForElementClickable(userProfileFollowButton.formatted("Follow"));
+        click(userProfileFollowButton.formatted("Follow"));
+        return this;
+    }
+
     //Verify
     public UnsplashHomePage verifyLoginButtonNotExist(){
-        //veriry
+        //verify
         assertElementNotExist(headerMenuButtonByName.formatted("Log in"));
+        return this;
+    }
+
+    public UnsplashHomePage verifyFollowButtonChangeToFollowing() throws IOException {
+        //verify
+        assertElementExist(userProfileFollowButton.formatted("Following"));
         return this;
     }
 }
