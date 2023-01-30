@@ -19,6 +19,7 @@ public class UnplashAccountPage extends ActionManager {
     //Function
     public UnplashAccountPage inputUserNameValue(String usernameValue){
         waitForElementVisible(userNameTextField);
+        clearText(userNameTextField);
         sendKeys(userNameTextField,usernameValue);
         getTestContext().setAttribute("Username",usernameValue);
         return this;

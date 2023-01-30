@@ -45,7 +45,6 @@ public class UnsplashHomePage extends ActionManager {
     public UnsplashHomePage hoverToUserProfilePictureAndClickFollowButton() throws InterruptedException {
         waitForElementVisible(userProfileModal);
         mouseHoverToElement(userProfilePicture);
-        waitForShortTime();
         waitForElementClickable(userProfileFollowButton.formatted("Follow"));
         click(userProfileFollowButton.formatted("Follow"));
         return this;

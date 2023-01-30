@@ -1,7 +1,7 @@
 package nt.tshape.automation.selenium;
 
-import nt.tshape.automation.reportmanager.HTMLReporter;
 import lombok.SneakyThrows;
+import nt.tshape.automation.reportmanager.HTMLReporter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -168,19 +168,27 @@ public class ActionManager {
         }
     }
 
+    @SneakyThrows
     public void waitForElementVisible(String elementToBeWait) {
         try {
             wait.until(ExpectedConditions.visibilityOf(findElement(elementToBeWait)));
         } catch (StaleElementReferenceException staleElementReferenceException) {
             waitForElementVisible(elementToBeWait);
+        } catch (NoSuchElementException noSuchElementException) {
+            waitForShortTime();
+            waitForElementVisible(elementToBeWait);
         }
     }
 
+    @SneakyThrows
     public void waitForElementClickable(String elementToBeWait) {
         try {
             wait.until(ExpectedConditions.elementToBeClickable(findElement(elementToBeWait)));
         } catch (StaleElementReferenceException staleElementReferenceException) {
             waitForElementClickable(elementToBeWait);
+        } catch (NoSuchElementException noSuchElementException) {
+            waitForShortTime();
+            waitForElementVisible(elementToBeWait);
         }
     }
 
@@ -254,8 +262,17 @@ public class ActionManager {
     }
 
     public void waitForShortTime() throws InterruptedException {
-        synchronized (this){
-            while (true){
+        synchronized (this) {
+            while (true) {
+                this.wait(3000);
+                break;
+            }
+        }
+    }
+
+    public void waitForMediumTime() throws InterruptedException {
+        synchronized (this) {
+            while (true) {
                 this.wait(5000);
                 break;
             }
@@ -279,17 +296,17 @@ public class ActionManager {
         }
     }
 
-    public void assertElementNotExist(String elementLocator){
+    public void assertElementNotExist(String elementLocator) {
         String passMessage = "Element [" + elementLocator + "] not exist anymore";
         String failMessage = "Element [" + elementLocator + "] still exist";
         System.out.println("Check is element [" + elementLocator + "] not exist?");
-        try{
+        try {
             findElement(elementLocator);
             HTMLReporter.getCurrentReportNode()
                     .fail(HTMLReporter.getHtmlReporter().markupFailedText(failMessage))
                     .addScreenCaptureFromPath(HTMLReporter.getHtmlReporter().takesScreenshot(driver, failMessage));
             System.out.println(failMessage);
-        }catch (NoSuchElementException | IOException e){
+        } catch (NoSuchElementException | IOException e) {
             Assert.assertTrue(true);
             HTMLReporter.getCurrentReportNode().pass(passMessage);
             System.out.println(passMessage);
@@ -300,11 +317,11 @@ public class ActionManager {
         String passMessage = "Element [" + elementLocator + "] exist!";
         String failMessage = "Element [" + elementLocator + "] not exist";
         System.out.println("Check is element [" + elementLocator + "] exist?");
-        try{
+        try {
             findElement(elementLocator);
             HTMLReporter.getCurrentReportNode().pass(passMessage);
             System.out.println(passMessage);
-        }catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             HTMLReporter.getCurrentReportNode()
                     .fail(HTMLReporter.getHtmlReporter().markupFailedText(failMessage))
                     .addScreenCaptureFromPath(HTMLReporter.getHtmlReporter().takesScreenshot(driver, failMessage));
