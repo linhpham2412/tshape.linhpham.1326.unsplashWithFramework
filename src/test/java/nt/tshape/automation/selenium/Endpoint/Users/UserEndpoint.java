@@ -8,8 +8,6 @@ import nt.tshape.automation.selenium.DataModel.UsersDataModel;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.stream.Collectors;
 
 public class UserEndpoint extends UniversalEndpoint {
@@ -52,7 +50,7 @@ public class UserEndpoint extends UniversalEndpoint {
 
     @SneakyThrows
     public UserEndpoint callPostToUserEndpointRequestWithBodyAndSaveCreatedUserId() {
-        sendPostRequestWithBody(UserEndpoint.class);
+        sendPostRequest(UserEndpoint.class);
         UsersDataModel createdUser = super.convertResponseToObject(UsersDataModel.class);
         getTestContext().setAttribute("UserID", createdUser.id);
         return this;

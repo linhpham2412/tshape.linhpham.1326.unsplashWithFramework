@@ -15,8 +15,6 @@ import org.testng.Assert;
 
 import javax.net.ssl.*;
 import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -160,18 +158,24 @@ public class UniversalEndpoint {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         try {
             Request request = null;
-            if (requestType == "GET" && requestBody == "") {
+            if (requestType == "GET") {
                 request = new Request.Builder()
                         .url(buildEndpointURL(urlBuilder))
                         .headers(headers)
                         .build();
-            } else if ((requestType == "POST" || requestType == "PUT") && requestBody != "") {
+            } else if (requestType == "POST") {
                 request = new Request.Builder()
                         .url(buildEndpointURL(urlBuilder))
                         .headers(headers)
                         .post(RequestBody.create(Constant.JSON, requestBody))
                         .build();
-            } else if (requestType == "DELETE" && requestBody == "") {
+            } else if (requestType == "PUT") {
+                request = new Request.Builder()
+                        .url(buildEndpointURL(urlBuilder))
+                        .headers(headers)
+                        .put(RequestBody.create(Constant.JSON, requestBody))
+                        .build();
+            } else if (requestType == "DELETE") {
                 request = new Request.Builder()
                         .url(buildEndpointURL(urlBuilder))
                         .headers(headers)
@@ -191,7 +195,13 @@ public class UniversalEndpoint {
             int endTime = endRequestTime.getSecond() * 1000 + endRequestTime.getNano() / 1000000;
             System.out.println("Request time: [" + (endTime - startTime) + "ms]");
             getCurrentReportNode().pass(getHtmlReporter()
-                    .markupCreateAPIInfoBlock("Send " + requestType + " request to endpoint [" + objectClass.getSimpleName() + "] successfully!", requestType, String.valueOf(urlBuilder), requestBody, String.valueOf((endTime - startTime)), responseBody, String.valueOf(response.code())));
+                    .markupCreateAPIInfoBlock("Send " + requestType + " request to endpoint [" + objectClass.getSimpleName() + "] successfully!",
+                            requestType,
+                            String.valueOf(urlBuilder),
+                            requestBody,
+                            String.valueOf((endTime - startTime)),
+                            responseBody,
+                            String.valueOf(response.code())));
         } catch (IOException e) {
             System.out.println("Failed to send " + requestType + " request to endpoint[" + urlBuilder + "]");
             getCurrentReportNode()
@@ -203,12 +213,14 @@ public class UniversalEndpoint {
         executeRequestTypeWithBody("GET", "", objectClass);
     }
 
-    protected <T> void sendPostRequestWithBody(Class<T> objectClass) {
-        executeRequestTypeWithBody("POST", requestJSON.toString(), objectClass);
+    protected <T> void sendPostRequest(Class<T> objectClass) {
+        String requestString = (requestJSON==null)?"":requestJSON.toString();
+        executeRequestTypeWithBody("POST", requestString, objectClass);
     }
 
-    protected <T> void sendPutRequestWithBody(Class<T> objectClass) {
-        executeRequestTypeWithBody("PUT", requestJSON.toString(), objectClass);
+    protected <T> void sendPutRequest(Class<T> objectClass) {
+        String requestString = (requestJSON==null)?"":requestJSON.toString();
+        executeRequestTypeWithBody("PUT", requestString, objectClass);
     }
 
     protected <T> void sendDeleteRequest(Class<T> objectClass) {
