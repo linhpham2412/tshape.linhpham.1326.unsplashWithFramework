@@ -2,11 +2,12 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
     <test verbose="2" preserve-order="true"
-          name="C:\Users\linhpham\Documents\Git_Repository\tshape.linhpham.1326.unsplashWithFramework\src\test\java\nt\tshape\automation\selenium\TestCase\Unsplash_Auto_Flow_.java">
+          name="C:/Users/linhpham/Documents/Git_Repository/tshape.linhpham.1326.unsplashWithFramework/src/test/java/nt/tshape/automation/selenium/TestCase/Unsplash_Auto_Flow_.java">
         <classes>
             <class name="nt.tshape.automation.selenium.TestCase.Unsplash_Auto_Flow_">
                 <methods>
-                    <include name="Scenario_1_Follow_a_photographer_successfully"/>
+                    <include name="Scenario_1_Follow_A_Photographer_Successfully"/>
+                    <include name="Scenario_2_Update_The_Username_URL_In_The_Profile_Page"/>
                 </methods>
             </class>
         </classes>

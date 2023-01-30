@@ -21,6 +21,8 @@ public class UnsplashHomePage extends ActionManager {
     private final String userProfileModal = "xpath=//div[contains(@class,'ReactModal__Content')]";
     private final String userProfilePicture = "xpath=//div[contains(@class,'ReactModal__Content')]//img";
     private final String userProfileFollowButton = "xpath=//button[contains(@title,'%s')]";
+    private final String userProfileButton = "xpath=//button[contains(@title,'Your personal menu button')]";
+    private final String userProfileSubMenuByName = "xpath=//div[contains(@role,'menu')]//a[contains(text(),'%s')]";
 
     //Function
     public UnsplashHomePage openUnsplashHomePage(){
@@ -46,6 +48,18 @@ public class UnsplashHomePage extends ActionManager {
         waitForShortTime();
         waitForElementClickable(userProfileFollowButton.formatted("Follow"));
         click(userProfileFollowButton.formatted("Follow"));
+        return this;
+    }
+
+    public UnsplashHomePage clickUserProfileButton(){
+        waitForElementClickable(userProfileButton);
+        click(userProfileButton);
+        return this;
+    }
+
+    public UnsplashHomePage clickUserProfileSubMenuName(String subMenuName){
+        waitForElementVisible(userProfileSubMenuByName.formatted(subMenuName));
+        click(userProfileSubMenuByName.formatted(subMenuName));
         return this;
     }
 

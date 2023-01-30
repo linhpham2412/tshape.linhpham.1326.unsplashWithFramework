@@ -23,10 +23,16 @@ public class UsernameFollowingEndpoint extends UniversalEndpoint {
     }
 
     public UsernameFollowingEndpoint callGETRequestToFollowingEndpointToGetListOfFollowings() throws IOException {
+        String usernameValue = "";
+        if (getTestContext().getAttributeByName("Username") == null){
+            usernameValue = ConfigLoader.getEnvironment("unsplashAccount");
+        }else{
+            usernameValue = getTestContext().getAttributeByName("Username");
+        }
         super.addHeader("Authorization",unsplashBearerToken, UsernameFollowingEndpoint.class);
         super.addHeader("Accept-Version","v1", UsernameFollowingEndpoint.class);
         setBaseHost(unsplashHost);
-        endpointPath = endpointPath.replaceAll("%username%",ConfigLoader.getEnvironment("unsplashAccount"));
+        endpointPath = endpointPath.replaceAll("%username%",usernameValue);
         setEndpointPath(endpointPath);
         sendGETRequest(UsernameFollowingEndpoint.class);
         ArrayList<FollowingDataModel> followingDataModelList = (ArrayList<FollowingDataModel>) convertResponseToListObjects();

@@ -256,7 +256,7 @@ public class ActionManager {
     public void waitForShortTime() throws InterruptedException {
         synchronized (this){
             while (true){
-                this.wait(3000);
+                this.wait(5000);
                 break;
             }
         }
