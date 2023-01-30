@@ -6,6 +6,8 @@ import nt.tshape.automation.selenium.DataModel.FollowingDataModel;
 import nt.tshape.automation.selenium.TestContext;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class UsernameFollowingEndpoint extends UniversalEndpoint {
