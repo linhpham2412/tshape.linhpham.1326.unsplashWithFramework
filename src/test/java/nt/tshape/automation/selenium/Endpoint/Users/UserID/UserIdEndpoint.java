@@ -8,13 +8,15 @@ import lombok.SneakyThrows;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.stream.Collectors;
 
 public class UserIdEndpoint extends UniversalEndpoint {
     private final String endpointPath = "api/users/{id}";
     private final String requestBodyLocation = "src/main/resources/RequestJSON/createUsersJSON.json";
 
-    public UserIdEndpoint(TestContext testContext){
+    public UserIdEndpoint(TestContext testContext) {
         super(testContext);
         setEndpointPath(endpointPath);
         setBaseHost(ConfigLoader.getEnvironment("apiHost"));

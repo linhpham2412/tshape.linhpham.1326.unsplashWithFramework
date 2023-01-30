@@ -8,6 +8,8 @@ import nt.tshape.automation.selenium.DataModel.UsersDataModel;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.stream.Collectors;
 
 public class UserEndpoint extends UniversalEndpoint {

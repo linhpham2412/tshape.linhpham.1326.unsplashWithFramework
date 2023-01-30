@@ -2,7 +2,6 @@ package nt.tshape.automation.apimanager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
@@ -14,7 +13,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.testng.Assert;
 
+import javax.net.ssl.*;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ public class UniversalEndpoint {
     private String responseBody;
     private JSONObject requestJSON;
     private TestContext testContext;
+    private OkHttpClient.Builder builder;
 
     public String getBaseHost() {
         return baseHost;
@@ -48,10 +51,20 @@ public class UniversalEndpoint {
     public void setBaseHost(String hostURL) {
         baseHost = hostURL;
     }
-
-    public UniversalEndpoint(TestContext testContext) {
+    @SneakyThrows
+    public UniversalEndpoint(TestContext testContext){
         setBaseHost(ConfigLoader.getEnvironment("apiHost"));
         OkHttpClient client = new OkHttpClient();
+        builder = new OkHttpClient.Builder();
+        SSLContext sslContext = SSLContext.getInstance("SSL");
+        sslContext.init(null, new TrustManager[]{TRUST_ALL_CERTS}, new java.security.SecureRandom());
+        builder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) TRUST_ALL_CERTS);
+        builder.hostnameVerifier(new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        });
         objectMapper = new ObjectMapper();
         apiClient = client.newBuilder()
                 .readTimeout(5, TimeUnit.SECONDS)
@@ -90,6 +103,7 @@ public class UniversalEndpoint {
     protected Response getResponse() {
         return response;
     }
+
     protected String getResponseBody() {
         return responseBody;
     }
@@ -165,7 +179,7 @@ public class UniversalEndpoint {
                         .build();
             }
             LocalDateTime startRequestTime = LocalDateTime.now();
-            response = apiClient.newCall(request).execute();
+            response = builder.build().newCall(request).execute();
             responseBody = response.body().string();
             LocalDateTime endRequestTime = LocalDateTime.now();
             clearAllParams();
@@ -207,13 +221,15 @@ public class UniversalEndpoint {
         return objectClass.cast(gson.fromJson(responseBody, objectClass));
     }
 
+    @SneakyThrows
     protected List<?> convertResponseToListObjects() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(getResponseBody(), new TypeReference<List<?>>() {});
+        return mapper.readValue(getResponseBody(), new TypeReference<List<?>>() {
+        });
     }
 
     protected JSONObject convertResponseToJSONObject() {
-        return new JSONObject(responseBody.trim().substring(0,responseBody.length()-1).substring(1,responseBody.length()-1));
+        return new JSONObject(responseBody.trim().substring(0, responseBody.length() - 1).substring(1, responseBody.length() - 1));
     }
 
     protected JSONObject convertStringToJSONObject(String valueToConvert) {
@@ -229,6 +245,22 @@ public class UniversalEndpoint {
     protected String convertObjectToString(Object object) {
         return new ObjectMapper().writeValueAsString(object);
     }
+
+    //SSL handling
+    TrustManager TRUST_ALL_CERTS = new X509TrustManager() {
+        @Override
+        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+        }
+
+        @Override
+        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+        }
+
+        @Override
+        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+            return new java.security.cert.X509Certificate[]{};
+        }
+    };
 
     //Verify
     protected <T> void verifyEndpointResponseCodeEqual(int expectedCode, Class<T> objectClass) {
