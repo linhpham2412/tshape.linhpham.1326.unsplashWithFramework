@@ -8,8 +8,6 @@ import lombok.SneakyThrows;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.stream.Collectors;
 
 public class UserIdEndpoint extends UniversalEndpoint {
@@ -41,7 +39,7 @@ public class UserIdEndpoint extends UniversalEndpoint {
 
     public UserIdEndpoint callUPDATERequestBySavedUserId(){
         super.changeEndpointPathParameterNameWithValue("{id}",getTestContext().getAttributeByName("UserID"), UserIdEndpoint.class);
-        super.sendPutRequestWithBody(UserIdEndpoint.class);
+        super.sendPutRequest(UserIdEndpoint.class);
         return this;
     }
 

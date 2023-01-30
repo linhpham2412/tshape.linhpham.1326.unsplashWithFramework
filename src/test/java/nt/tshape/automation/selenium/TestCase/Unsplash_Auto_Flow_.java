@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import nt.tshape.automation.config.ConfigLoader;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Follow.UsersFollowEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Following.UsernameFollowingEndpoint;
+import nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Me.MeEndpoint;
 import nt.tshape.automation.selenium.PageModal.UnplashAccountPage;
 import nt.tshape.automation.selenium.PageModal.UnsplashHomePage;
 import nt.tshape.automation.selenium.PageModal.UnsplashUserProfilePage;
@@ -48,6 +49,7 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
         UnsplashHomePage unsplashHomePage = new UnsplashHomePage(getDriver(),getTestContext());
         UnsplashUserProfilePage unsplashUserProfilePage = new UnsplashUserProfilePage(getDriver(),getTestContext());
         UnplashAccountPage unplashAccountPage = new UnplashAccountPage(getDriver(),getTestContext());
+        MeEndpoint meEndpoint = new MeEndpoint(getTestContext());
 
         //Start Testing
         unsplashHomePage
@@ -70,5 +72,8 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
         unsplashUserProfilePage
                 .openProfilePageWithNewUserName()
                 .verifyUserFullNameDisplay("Linh Pham");
+
+        //Clean up
+        meEndpoint.callPUTRequestToRestoreUserNameToDefaultValue();
     }
 }
