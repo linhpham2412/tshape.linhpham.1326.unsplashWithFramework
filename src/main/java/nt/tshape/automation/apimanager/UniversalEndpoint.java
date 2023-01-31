@@ -236,7 +236,8 @@ public class UniversalEndpoint {
     @SneakyThrows
     protected List<?> convertResponseToListObjects() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(getResponseBody(), new TypeReference<List<?>>() {
+        String responseString = (getResponseBody().charAt(0)=='{')?"["+getResponseBody()+"]":getResponseBody();
+        return mapper.readValue(responseString, new TypeReference<List<?>>() {
         });
     }
 

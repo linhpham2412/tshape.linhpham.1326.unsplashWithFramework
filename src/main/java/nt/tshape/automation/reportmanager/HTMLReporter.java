@@ -152,7 +152,6 @@ public class HTMLReporter {
             case '2' -> responseCode ="<span class='badge white-text green'>"+responseCode+"</span>";
             case '4', '5' -> responseCode ="<span class='badge white-text red'>"+responseCode+"</span>";
         }
-//        responseBody = (responseBody.charAt(0)=='{')?"["+responseBody+"]":requestBody;
         tableHTMLFrame = tableHTMLFrame.replaceAll("%RequestMessage%", requestMessage);
         tableHTMLFrame = tableHTMLFrame.replaceAll("%runtimeHTMLReport-div%", reqRuntimeHTMLReportDivID);
         tableHTMLFrame = tableHTMLFrame.replaceAll("%RequestType%", requestType);

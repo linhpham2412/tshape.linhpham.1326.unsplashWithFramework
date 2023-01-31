@@ -2,11 +2,15 @@ package nt.tshape.automation.selenium.TestCase;
 
 import lombok.SneakyThrows;
 import nt.tshape.automation.config.ConfigLoader;
+import nt.tshape.automation.selenium.Endpoint.Unsplash.Photos.Id.Like.PhotoIdLikeEndpoint;
+import nt.tshape.automation.selenium.Endpoint.Unsplash.Photos.Random.PhotoRandomEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Follow.UsersFollowEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Following.UsernameFollowingEndpoint;
-import nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Me.MeEndpoint;
+import nt.tshape.automation.selenium.Endpoint.Unsplash.Me.MeEndpoint;
+import nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Likes.LikesEndpoint;
 import nt.tshape.automation.selenium.PageModal.UnplashAccountPage;
 import nt.tshape.automation.selenium.PageModal.UnsplashHomePage;
+import nt.tshape.automation.selenium.PageModal.UnsplashPhotosPage;
 import nt.tshape.automation.selenium.PageModal.UnsplashUserProfilePage;
 import nt.tshape.automation.selenium.Utils;
 import nt.tshape.automation.setup.WebDriverTestNGSetupBase;
@@ -75,5 +79,31 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
 
         //Clean up
         meEndpoint.callPUTRequestToRestoreUserNameToDefaultValue();
+    }
+
+    @SneakyThrows
+    @Test(alwaysRun = true)
+    public void Scenario_3_List_Of_Liked_Photos(){
+        LikesEndpoint likesEndpoint = new LikesEndpoint(getTestContext());
+        PhotoIdLikeEndpoint photoIdLikeEndpoint = new PhotoIdLikeEndpoint(getTestContext());
+        PhotoRandomEndpoint photoRandomEndpoint = new PhotoRandomEndpoint(getTestContext());
+        UnsplashHomePage unsplashHomePage = new UnsplashHomePage(getDriver(),getTestContext());
+        UnsplashPhotosPage unsplashPhotosPage = new UnsplashPhotosPage(getDriver(),getTestContext());
+
+        //Precondition
+        likesEndpoint.callGETRequestToGetListOfLikedPhotos();
+        photoIdLikeEndpoint.callDELETERequestsToPhotoIdLikeEndpointToUnLikeAll();
+        photoRandomEndpoint.sendGETRequestToPhotoRandomEndpointToGetListOfPhotos(3);
+
+        //Start Testing
+        unsplashHomePage
+                .openUnsplashHomePage()
+                .clickLoginButton()
+                .openUnsplashLoginPage()
+                .verifyLoginPageTitleDisplayCorrect("Login | Unsplash")
+                .loginWithUsernameAndPasswordAndReturnToHomePage(ConfigLoader.getEnvironment("unsplashEmail"),
+                        ConfigLoader.getEnvironment("unsplashPassword"), unsplashHomePage);
+
+        unsplashPhotosPage.openPhotoPageInRandomListAndLikeThePhoto();
     }
 }

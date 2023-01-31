@@ -8,6 +8,7 @@
                 <methods>
                     <include name="Scenario_1_Follow_A_Photographer_Successfully"/>
                     <include name="Scenario_2_Update_The_Username_URL_In_The_Profile_Page"/>
+                    <include name="Scenario_3_List_Of_Liked_Photos"/>
                 </methods>
             </class>
         </classes>
