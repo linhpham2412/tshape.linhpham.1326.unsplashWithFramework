@@ -1,8 +1,7 @@
-package nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Me;
+package nt.tshape.automation.selenium.Endpoint.Unsplash.Me;
 
 import nt.tshape.automation.apimanager.UniversalEndpoint;
 import nt.tshape.automation.config.ConfigLoader;
-import nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Following.UsernameFollowingEndpoint;
 import nt.tshape.automation.selenium.TestContext;
 
 public class MeEndpoint extends UniversalEndpoint {
