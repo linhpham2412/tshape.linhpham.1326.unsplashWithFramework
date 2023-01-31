@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.Wait;
 import org.testng.Assert;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.testng.Assert.assertEquals;
@@ -72,6 +73,34 @@ public class ActionManager {
             throw new NoSuchElementException("The element located by : [" + elementByTypeAndPath + "] cannot be found!");
         } catch (StaleElementReferenceException staleElementReferenceException) {
             return findElement(elementByTypeAndPath);
+        } catch (Exception e) {
+            System.out.println("There is an error when finding the element : [" + elementByTypeAndPath + "]");
+            throw e;
+        }
+        return workingElement;
+    }
+
+    public List<WebElement> findElements(String elementByTypeAndPath) {
+        List<WebElement> workingElement = null;
+        String[] extractedString = elementByTypeAndPath.split("=", 2);
+        String byType = extractedString[0];
+        String path = extractedString[1];
+        try {
+            switch (byType) {
+                case "id" -> workingElement = driver.findElements(By.id(path));
+                case "xpath" -> workingElement = driver.findElements(By.xpath(path));
+                case "class" -> workingElement = driver.findElements(By.className(path));
+                case "css" -> workingElement = driver.findElements(By.cssSelector(path));
+                case "linkText" -> workingElement = driver.findElements(By.linkText(path));
+                case "name" -> workingElement = driver.findElements(By.name(path));
+                case "partialLinkText" -> workingElement = driver.findElements(By.partialLinkText(path));
+                case "tag" -> workingElement = driver.findElements(By.tagName(path));
+            }
+        } catch (NoSuchElementException noSuchElementException) {
+            System.out.println("The element located by : [" + elementByTypeAndPath + "] cannot be found!");
+            throw new NoSuchElementException("The element located by : [" + elementByTypeAndPath + "] cannot be found!");
+        } catch (StaleElementReferenceException staleElementReferenceException) {
+            return findElements(elementByTypeAndPath);
         } catch (Exception e) {
             System.out.println("There is an error when finding the element : [" + elementByTypeAndPath + "]");
             throw e;

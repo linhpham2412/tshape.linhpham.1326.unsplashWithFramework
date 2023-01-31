@@ -7,11 +7,8 @@ import nt.tshape.automation.selenium.Endpoint.Unsplash.Photos.Random.PhotoRandom
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Follow.UsersFollowEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Following.UsernameFollowingEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Me.MeEndpoint;
-import nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Likes.LikesEndpoint;
-import nt.tshape.automation.selenium.PageModal.UnplashAccountPage;
-import nt.tshape.automation.selenium.PageModal.UnsplashHomePage;
-import nt.tshape.automation.selenium.PageModal.UnsplashPhotosPage;
-import nt.tshape.automation.selenium.PageModal.UnsplashUserProfilePage;
+import nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Likes.UsernameLikesEndpoint;
+import nt.tshape.automation.selenium.PageModal.*;
 import nt.tshape.automation.selenium.Utils;
 import nt.tshape.automation.setup.WebDriverTestNGSetupBase;
 import org.testng.annotations.Test;
@@ -84,14 +81,15 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
     @SneakyThrows
     @Test(alwaysRun = true)
     public void Scenario_3_List_Of_Liked_Photos(){
-        LikesEndpoint likesEndpoint = new LikesEndpoint(getTestContext());
+        UsernameLikesEndpoint usernameLikesEndpoint = new UsernameLikesEndpoint(getTestContext());
         PhotoIdLikeEndpoint photoIdLikeEndpoint = new PhotoIdLikeEndpoint(getTestContext());
         PhotoRandomEndpoint photoRandomEndpoint = new PhotoRandomEndpoint(getTestContext());
         UnsplashHomePage unsplashHomePage = new UnsplashHomePage(getDriver(),getTestContext());
         UnsplashPhotosPage unsplashPhotosPage = new UnsplashPhotosPage(getDriver(),getTestContext());
+        UnsplashUsernameLikePage unsplashUsernameLikePage = new UnsplashUsernameLikePage(getDriver(),getTestContext());
 
         //Precondition
-        likesEndpoint.callGETRequestToGetListOfLikedPhotos();
+        usernameLikesEndpoint.callGETRequestToGetListOfLikedPhotos();
         photoIdLikeEndpoint.callDELETERequestsToPhotoIdLikeEndpointToUnLikeAll();
         photoRandomEndpoint.sendGETRequestToPhotoRandomEndpointToGetListOfPhotos(3);
 
@@ -105,5 +103,10 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
                         ConfigLoader.getEnvironment("unsplashPassword"), unsplashHomePage);
 
         unsplashPhotosPage.openPhotoPageInRandomListAndLikeThePhoto();
+
+        unsplashUsernameLikePage
+                .openUsernameLikePage()
+                .verifyUsernameMenuFieldNameWithValue("Likes","3")
+                .verifyNumberOfImagesInPage("3");
     }
 }
