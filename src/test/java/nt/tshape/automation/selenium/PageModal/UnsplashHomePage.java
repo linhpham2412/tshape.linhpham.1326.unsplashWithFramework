@@ -18,11 +18,10 @@ public class UnsplashHomePage extends ActionManager {
     //Locator
     private final String headerMenuButtonByName = "xpath=//a[contains(text(),'%s')]";
     private final String imageBlock = "xpath=//figure[(@itemprop='image')]";
-    private final String userProfileModal = "xpath=//div[contains(@class,'ReactModal__Content')]";
-    private final String userProfilePicture = "xpath=//div[contains(@class,'ReactModal__Content')]//img";
-    private final String userProfileFollowButton = "xpath=//button[contains(@title,'%s')]";
-    private final String userProfileButton = "xpath=//button[contains(@title,'Your personal menu button')]";
+
+    private final String userProfileButtonByTitle = "xpath=//button[contains(@title,'%s')]";
     private final String userProfileSubMenuByName = "xpath=//div[contains(@role,'menu')]//a[contains(text(),'%s')]";
+
 
     //Function
     public UnsplashHomePage openUnsplashHomePage(){
@@ -42,17 +41,9 @@ public class UnsplashHomePage extends ActionManager {
         return this;
     }
 
-    public UnsplashHomePage hoverToUserProfilePictureAndClickFollowButton() throws InterruptedException {
-        waitForElementVisible(userProfileModal);
-        mouseHoverToElement(userProfilePicture);
-        waitForElementClickable(userProfileFollowButton.formatted("Follow"));
-        click(userProfileFollowButton.formatted("Follow"));
-        return this;
-    }
-
     public UnsplashHomePage clickUserProfileButton(){
-        waitForElementClickable(userProfileButton);
-        click(userProfileButton);
+        waitForElementClickable(userProfileButtonByTitle.formatted("Your personal menu button"));
+        click(userProfileButtonByTitle.formatted("Your personal menu button"));
         return this;
     }
 
@@ -62,16 +53,12 @@ public class UnsplashHomePage extends ActionManager {
         return this;
     }
 
+
+
     //Verify
     public UnsplashHomePage verifyLoginButtonNotExist(){
         //verify
         assertElementNotExist(headerMenuButtonByName.formatted("Log in"));
-        return this;
-    }
-
-    public UnsplashHomePage verifyFollowButtonChangeToFollowing() throws IOException {
-        //verify
-        assertElementExist(userProfileFollowButton.formatted("Following"));
         return this;
     }
 }

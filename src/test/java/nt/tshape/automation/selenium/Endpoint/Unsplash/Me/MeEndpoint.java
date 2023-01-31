@@ -15,7 +15,12 @@ public class MeEndpoint extends UniversalEndpoint {
     }
 
     public MeEndpoint callPUTRequestToRestoreUserNameToDefaultValue(){
-        String usernameValue = ConfigLoader.getEnvironment("unsplashAccount");
+        String usernameValue = "";
+        if (getTestContext().getAttributeByName("Username") == null){
+            usernameValue = ConfigLoader.getEnvironment("unsplashAccount");
+        }else{
+            usernameValue = getTestContext().getAttributeByName("Username");
+        }
         super.addHeader("Authorization",unsplashBearerToken, MeEndpoint.class);
         super.addHeader("Accept-Version","v1", MeEndpoint.class);
         setBaseHost(unsplashHost);
