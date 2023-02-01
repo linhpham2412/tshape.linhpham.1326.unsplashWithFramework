@@ -26,6 +26,7 @@ public class UnsplashPhotosPage extends ActionManager {
     private final String userProfilePhotoButtonByText = "xpath=//button[(text()='%s')]";
     private final String userProfilePhotoInputByName = "xpath=//input[@name='%s']";
     private final String userProfilePhotoModalButtonByTitle= "xpath=//div[contains(@class,'ReactModal__Content')]//button[contains(@title,'%s')]";
+    private final String userProfilePhotoAddCollectionModalByName = "xpath=//button[contains(@type,'button')]//span[text()='%s']";
 
     //Function
     public UnsplashPhotosPage openPhotoPageInRandomListAndLikeThePhoto(){
@@ -38,6 +39,22 @@ public class UnsplashPhotosPage extends ActionManager {
             openUrl(randomPhotoList.get(i).links.html);
             waitForElementClickable(menuHeaderPhotoButton.formatted("Like"));
             click(menuHeaderPhotoButton.formatted("Like"));
+        }
+        return this;
+    }
+
+    public UnsplashPhotosPage openPhotoPageInRandomListAndAddToCollectionName(String collectionName) throws InterruptedException {
+        ObjectMapper mapper = new ObjectMapper();
+        List<PhotoDataModel> randomPhotoList = mapper.convertValue(getTestContext().getContextObjectsWithName("RandomPhotoList"),
+                new TypeReference<List<PhotoDataModel>>() {
+                });
+        waitForShortTime();
+        for (int i = 0;i< randomPhotoList.size();i++){
+            openUrl(randomPhotoList.get(i).links.html);
+            waitForElementClickable(menuHeaderPhotoButton.formatted("Add to collection"));
+            click(menuHeaderPhotoButton.formatted("Add to collection"));
+            waitForElementVisible(userProfilePhotoAddCollectionModalByName.formatted(collectionName));
+            click(userProfilePhotoAddCollectionModalByName.formatted(collectionName));
         }
         return this;
     }

@@ -20,6 +20,7 @@ public class ActionManager {
     private final WebDriver driver;
     private final Wait<WebDriver> wait;
     private final TestContext testContext;
+    private final int retryCounter = 3;
 
     public ActionManager(WebDriver driver, TestContext testContext) {
         this.driver = driver;
@@ -202,10 +203,10 @@ public class ActionManager {
         try {
             wait.until(ExpectedConditions.visibilityOf(findElement(elementToBeWait)));
         } catch (StaleElementReferenceException staleElementReferenceException) {
-            waitForElementVisible(elementToBeWait);
-        } catch (NoSuchElementException noSuchElementException) {
             waitForShortTime();
             waitForElementVisible(elementToBeWait);
+        } catch (NoSuchElementException noSuchElementException) {
+            throw noSuchElementException;
         }
     }
 
@@ -214,10 +215,10 @@ public class ActionManager {
         try {
             wait.until(ExpectedConditions.elementToBeClickable(findElement(elementToBeWait)));
         } catch (StaleElementReferenceException staleElementReferenceException) {
+            waitForShortTime();
             waitForElementClickable(elementToBeWait);
         } catch (NoSuchElementException noSuchElementException) {
-            waitForShortTime();
-            waitForElementVisible(elementToBeWait);
+            throw noSuchElementException;
         }
     }
 
@@ -293,7 +294,7 @@ public class ActionManager {
     public void waitForShortTime() throws InterruptedException {
         synchronized (this) {
             while (true) {
-                this.wait(3000);
+                this.wait(1000);
                 break;
             }
         }

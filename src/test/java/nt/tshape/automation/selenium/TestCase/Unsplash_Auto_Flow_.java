@@ -2,6 +2,7 @@ package nt.tshape.automation.selenium.TestCase;
 
 import lombok.SneakyThrows;
 import nt.tshape.automation.config.ConfigLoader;
+import nt.tshape.automation.selenium.Endpoint.Unsplash.Collections.CollectionEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Collections.Id.CollectionIdEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Me.MeEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Photos.Id.Like.PhotoIdLikeEndpoint;
@@ -122,11 +123,15 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
         UsernameCollectionsEndpoint usernameCollectionsEndpoint = new UsernameCollectionsEndpoint(getTestContext());
         CollectionIdEndpoint collectionIdEndpoint = new CollectionIdEndpoint(getTestContext());
         UnsplashHomePage unsplashHomePage = new UnsplashHomePage(getDriver(), getTestContext());
+        PhotoRandomEndpoint photoRandomEndpoint = new PhotoRandomEndpoint(getTestContext());
+        CollectionEndpoint collectionEndpoint = new CollectionEndpoint(getTestContext());
+        UnsplashUsernameCollectionsPage unsplashUsernameCollectionsPage = new UnsplashUsernameCollectionsPage(getDriver(), getTestContext());
 
         //Precondition
         usernameCollectionsEndpoint.callGETRequestUsernameCollectionsEndpointToRetrieveListOfCollection();
         collectionIdEndpoint.callDELETERequestsToCollectionIdEndpointToRemoveCollections();
         UnsplashPhotosPage unsplashPhotosPage = new UnsplashPhotosPage(getDriver(), getTestContext());
+        photoRandomEndpoint.sendGETRequestToPhotoRandomEndpointToGetListOfPhotos(2);
 
         //Start Testing
         unsplashHomePage
@@ -136,13 +141,17 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
                 .verifyLoginPageTitleDisplayCorrect("Login | Unsplash")
                 .loginWithUsernameAndPasswordAndReturnToHomePage(ConfigLoader.getEnvironment("unsplashEmail"),
                         ConfigLoader.getEnvironment("unsplashPassword"), unsplashHomePage)
-                .verifyLoginButtonNotExist()
-                .clickOnTopLeftImageBlock();
+                .verifyLoginButtonNotExist();
 
-        unsplashPhotosPage
-                .clickButtonInModalPageWithTitle("Add to collection")
-                .clickButtonInPageWithText("Create a new collection")
-                .inputNewCollectionTitleAndCheckPrivateCheckbox("My new private Collection")
-                .clickButtonInPageWithText("Create collection");
+        collectionEndpoint.callPOSTRequestToCreateNewCollectionWithTitleAndIsPrivate("My new private Collection", "true");
+
+        unsplashPhotosPage.openPhotoPageInRandomListAndAddToCollectionName("My new private Collection");
+
+        unsplashUsernameCollectionsPage
+                .openUsernameCollectionsPage()
+                .verifyUsernameCollectionMenuFieldNameWithValue("Collections", "1")
+                .verifyCollectionNameExist("My new private Collection")
+                .clickOnCollectionWithName("My new private Collection")
+                .verifyNumberOfImagesInPage("2");
     }
 }
