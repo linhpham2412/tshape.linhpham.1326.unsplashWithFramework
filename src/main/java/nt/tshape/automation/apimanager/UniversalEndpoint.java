@@ -51,7 +51,7 @@ public class UniversalEndpoint {
     }
     @SneakyThrows
     public UniversalEndpoint(TestContext testContext){
-        setBaseHost(ConfigLoader.getEnvironment("apiHost"));
+//        setBaseHost(ConfigLoader.getEnvironment("apiHost"));
         OkHttpClient client = new OkHttpClient();
         builder = new OkHttpClient.Builder();
         SSLContext sslContext = SSLContext.getInstance("SSL");
@@ -75,7 +75,7 @@ public class UniversalEndpoint {
         headers = new Headers.Builder()
                 .build();
         this.testContext = testContext;
-        System.out.println("Set up Base endpoint [" + baseHost + "] successfully!");
+//        System.out.println("Set up Base endpoint [" + baseHost + "] successfully!");
     }
 
     public TestContext getTestContext() {

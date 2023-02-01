@@ -2,8 +2,9 @@ package nt.tshape.automation.selenium.TestCase;
 
 import lombok.SneakyThrows;
 import nt.tshape.automation.config.ConfigLoader;
-import nt.tshape.automation.selenium.Endpoint.Unsplash.Collections.CollectionEndpoint;
+import nt.tshape.automation.selenium.Endpoint.Unsplash.Collections.CollectionsEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Collections.Id.CollectionIdEndpoint;
+import nt.tshape.automation.selenium.Endpoint.Unsplash.Collections.Id.Remove.CollectionIdRemoveEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Me.MeEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Photos.Id.Like.PhotoIdLikeEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Photos.Random.PhotoRandomEndpoint;
@@ -56,7 +57,7 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
     public void Scenario_2_Update_The_Username_URL_In_The_Profile_Page() {
         UnsplashHomePage unsplashHomePage = new UnsplashHomePage(getDriver(), getTestContext());
         UnsplashUserProfilePage unsplashUserProfilePage = new UnsplashUserProfilePage(getDriver(), getTestContext());
-        UnplashAccountPage unplashAccountPage = new UnplashAccountPage(getDriver(), getTestContext());
+        UnsplashAccountPage unsplashAccountPage = new UnsplashAccountPage(getDriver(), getTestContext());
         MeEndpoint meEndpoint = new MeEndpoint(getTestContext());
 
         //Start Testing
@@ -73,7 +74,7 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
         unsplashUserProfilePage
                 .clickEditProfileButtonByName("Edit Tags");
 
-        unplashAccountPage
+        unsplashAccountPage
                 .inputUserNameValue("linhpham2412_" + Utils.generateRandomTestCharacters(5))
                 .scrollToButtonNameAndClick("Update account");
 
@@ -124,8 +125,10 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
         CollectionIdEndpoint collectionIdEndpoint = new CollectionIdEndpoint(getTestContext());
         UnsplashHomePage unsplashHomePage = new UnsplashHomePage(getDriver(), getTestContext());
         PhotoRandomEndpoint photoRandomEndpoint = new PhotoRandomEndpoint(getTestContext());
-        CollectionEndpoint collectionEndpoint = new CollectionEndpoint(getTestContext());
+        CollectionsEndpoint collectionsEndpoint = new CollectionsEndpoint(getTestContext());
         UnsplashUsernameCollectionsPage unsplashUsernameCollectionsPage = new UnsplashUsernameCollectionsPage(getDriver(), getTestContext());
+        CollectionIdRemoveEndpoint collectionIdRemoveEndpoint = new CollectionIdRemoveEndpoint(getTestContext());
+        UnsplashCollectionCollectionIdPage unsplashCollectionCollectionIdPage = new UnsplashCollectionCollectionIdPage(getDriver(), getTestContext());
 
         //Precondition
         usernameCollectionsEndpoint.callGETRequestUsernameCollectionsEndpointToRetrieveListOfCollection();
@@ -143,7 +146,7 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
                         ConfigLoader.getEnvironment("unsplashPassword"), unsplashHomePage)
                 .verifyLoginButtonNotExist();
 
-        collectionEndpoint.callPOSTRequestToCreateNewCollectionWithTitleAndIsPrivate("My new private Collection", "true");
+        collectionsEndpoint.callPOSTRequestToCreateNewCollectionWithTitleAndIsPrivate("My new private Collection", "true");
 
         unsplashPhotosPage.openPhotoPageInRandomListAndAddToCollectionName("My new private Collection");
 
@@ -151,7 +154,15 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
                 .openUsernameCollectionsPage()
                 .verifyUsernameCollectionMenuFieldNameWithValue("Collections", "1")
                 .verifyCollectionNameExist("My new private Collection")
-                .clickOnCollectionWithName("My new private Collection")
-                .verifyNumberOfImagesInPage("2");
+                .clickOnCollectionWithName("My new private Collection");
+
+        unsplashCollectionCollectionIdPage.verifyNumberOfImagesInPage("2");
+
+        collectionIdRemoveEndpoint.callDELETERequestsToCollectionIdRemoveEndpointToRemove1PhotoInCollection(0);
+
+        unsplashCollectionCollectionIdPage
+                .openUsernameCollectionsWithSavedCollectionIdPage()
+                .verifyRemovedPhotoNotExist()
+                .verifyNumberOfImagesInPage("1");
     }
 }
