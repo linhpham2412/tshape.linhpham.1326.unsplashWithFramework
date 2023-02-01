@@ -15,4 +15,5 @@ public class PhotoDataModel {
     public String color;
     public Links links;
     public UsersDataModel user;
+    public String alt_description;
 }

@@ -1,13 +1,12 @@
 package nt.tshape.automation.selenium.PageModal;
 
-import nt.tshape.automation.config.ConfigLoader;
 import nt.tshape.automation.selenium.ActionManager;
 import nt.tshape.automation.selenium.TestContext;
 import org.openqa.selenium.WebDriver;
 
-public class UnplashAccountPage extends ActionManager {
+public class UnsplashAccountPage extends ActionManager {
     private WebDriver driver;
-    public UnplashAccountPage(WebDriver driver, TestContext testContext) {
+    public UnsplashAccountPage(WebDriver driver, TestContext testContext) {
         super(driver, testContext);
         this.driver=driver;
     }
@@ -17,7 +16,7 @@ public class UnplashAccountPage extends ActionManager {
     private final String profileButtonLocatorByName = "xpath=//input[contains(@class,'btn') and (@value='%s')]";
 
     //Function
-    public UnplashAccountPage inputUserNameValue(String usernameValue){
+    public UnsplashAccountPage inputUserNameValue(String usernameValue){
         waitForElementVisible(userNameTextField);
         clearText(userNameTextField);
         sendKeys(userNameTextField,usernameValue);
@@ -25,7 +24,7 @@ public class UnplashAccountPage extends ActionManager {
         return this;
     }
 
-    public UnplashAccountPage scrollToButtonNameAndClick(String buttonName){
+    public UnsplashAccountPage scrollToButtonNameAndClick(String buttonName){
         mouseMoveToElementAndClick(profileButtonLocatorByName.formatted(buttonName));
         return this;
     }
