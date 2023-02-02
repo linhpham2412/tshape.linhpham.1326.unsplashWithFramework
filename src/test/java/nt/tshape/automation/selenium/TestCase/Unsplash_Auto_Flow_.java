@@ -165,4 +165,44 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
                 .verifyRemovedPhotoNotExist()
                 .verifyNumberOfImagesInPage("1");
     }
+
+    @SneakyThrows
+    @Test(alwaysRun = true)
+    public void Scenario_5_Download_Photo_Successfully() {
+        PhotoRandomEndpoint photoRandomEndpoint = new PhotoRandomEndpoint(getTestContext());
+        UnsplashHomePage unsplashHomePage = new UnsplashHomePage(getDriver(), getTestContext());
+        UnsplashPhotosPage unsplashPhotosPage = new UnsplashPhotosPage(getDriver(), getTestContext());
+        UnsplashAccountPage unsplashAccountPage = new UnsplashAccountPage(getDriver(), getTestContext());
+        UnsplashUserProfilePage unsplashUserProfilePage = new UnsplashUserProfilePage(getDriver(), getTestContext());
+        UnsplashAccountHistoryPage unsplashAccountHistoryPage = new UnsplashAccountHistoryPage(getDriver(),getTestContext());
+
+        //Precondition
+        photoRandomEndpoint.sendGETRequestToPhotoRandomEndpointToGetListOfPhotos(1);
+
+        //Start Testing
+        unsplashHomePage
+                .openUnsplashHomePage()
+                .clickLoginButton()
+                .openUnsplashLoginPage()
+                .verifyLoginPageTitleDisplayCorrect("Login | Unsplash")
+                .loginWithUsernameAndPasswordAndReturnToHomePage(ConfigLoader.getEnvironment("unsplashEmail"),
+                        ConfigLoader.getEnvironment("unsplashPassword"), unsplashHomePage)
+                .verifyLoginButtonNotExist();
+
+        unsplashPhotosPage
+                .openPhotoPageInRandomListWithIndex(0)
+                .clickLinkButtonInPageWithName("Download");
+
+        unsplashHomePage
+                .clickUserProfileButton()
+                .clickUserProfileSubMenuName("View profile");
+
+        unsplashUserProfilePage.clickEditProfileButtonByName("Edit Tags");
+
+        unsplashAccountPage.clickOnLinkButtonByName("Download history");
+
+        unsplashAccountHistoryPage
+                .getDownloadedItemNameByIndexInPage(0)
+                .verifyDownloadedFileExistInDownloadFolder();
+    }
 }

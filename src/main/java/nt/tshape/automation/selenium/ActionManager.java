@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class ActionManager {
     private final WebDriver driver;
@@ -161,6 +162,20 @@ public class ActionManager {
         }
     }
 
+    public String getTextFromElement(WebElement webElementToGetText){
+        try {
+            elementHighlightAuto(webElementToGetText);
+            String resultText = webElementToGetText.getTagName().equalsIgnoreCase("input") ? webElementToGetText.getAttribute("value") : webElementToGetText.getText();
+            System.out.println("Got text [" + resultText + "] from element [" + webElementToGetText + "]");
+            return resultText;
+        } catch (StaleElementReferenceException staleElementReferenceException) {
+            return getTextFromElement(webElementToGetText);
+        } catch (Exception e) {
+            System.out.println("Cannot get text from element [" + webElementToGetText + "]");
+            throw e;
+        }
+    }
+
     @SneakyThrows
     public void click(String elementToClick) {
         String passMessage = "Clicked on the element [" + elementToClick + "]";
@@ -303,6 +318,15 @@ public class ActionManager {
     public void waitForMediumTime() throws InterruptedException {
         synchronized (this) {
             while (true) {
+                this.wait(3000);
+                break;
+            }
+        }
+    }
+
+    public void waitForLongTime() throws InterruptedException {
+        synchronized (this) {
+            while (true) {
                 this.wait(5000);
                 break;
             }
@@ -352,6 +376,22 @@ public class ActionManager {
             HTMLReporter.getCurrentReportNode().pass(passMessage);
             System.out.println(passMessage);
         } catch (NoSuchElementException e) {
+            HTMLReporter.getCurrentReportNode()
+                    .fail(HTMLReporter.getHtmlReporter().markupFailedText(failMessage))
+                    .addScreenCaptureFromPath(HTMLReporter.getHtmlReporter().takesScreenshot(driver, failMessage));
+            System.out.println(failMessage);
+        }
+    }
+
+    public void assertConditionTrue(String objectName, Boolean actualCondition) throws IOException {
+        String passMessage = "Assert object [" + objectName + "] passed because it is True";
+        String failMessage = "[" + objectName + "] is not True";
+        System.out.println("Asserting object [" + objectName + "] is True?");
+        try {
+            assertTrue(actualCondition);
+            HTMLReporter.getCurrentReportNode().pass(passMessage);
+            System.out.println(passMessage);
+        } catch (AssertionError e) {
             HTMLReporter.getCurrentReportNode()
                     .fail(HTMLReporter.getHtmlReporter().markupFailedText(failMessage))
                     .addScreenCaptureFromPath(HTMLReporter.getHtmlReporter().takesScreenshot(driver, failMessage));

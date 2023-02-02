@@ -27,8 +27,17 @@ public class UnsplashPhotosPage extends ActionManager {
     private final String userProfilePhotoInputByName = "xpath=//input[@name='%s']";
     private final String userProfilePhotoModalButtonByTitle= "xpath=//div[contains(@class,'ReactModal__Content')]//button[contains(@title,'%s')]";
     private final String userProfilePhotoAddCollectionModalByName = "xpath=//button[contains(@type,'button')]//span[text()='%s']";
+    private final String userProfilePhotoMenuLinkButtonByName = "xpath=//span[text()='%s']";
 
     //Function
+    public UnsplashPhotosPage openPhotoPageInRandomListWithIndex(int index){
+        ObjectMapper mapper = new ObjectMapper();
+        List<PhotoDataModel> randomPhotoList = mapper.convertValue(getTestContext().getContextObjectsWithName("RandomPhotoList"),
+                new TypeReference<List<PhotoDataModel>>() {
+                });
+        openUrl(randomPhotoList.get(index).links.html);
+        return this;
+    }
     public UnsplashPhotosPage openPhotoPageInRandomListAndLikeThePhoto(){
         ObjectMapper mapper = new ObjectMapper();
         List<PhotoDataModel> randomPhotoList = mapper.convertValue(getTestContext().getContextObjectsWithName("RandomPhotoList"),
@@ -48,11 +57,12 @@ public class UnsplashPhotosPage extends ActionManager {
         List<PhotoDataModel> randomPhotoList = mapper.convertValue(getTestContext().getContextObjectsWithName("RandomPhotoList"),
                 new TypeReference<List<PhotoDataModel>>() {
                 });
-        waitForShortTime();
         for (int i = 0;i< randomPhotoList.size();i++){
             openUrl(randomPhotoList.get(i).links.html);
+            waitForShortTime();
             waitForElementClickable(menuHeaderPhotoButton.formatted("Add to collection"));
             click(menuHeaderPhotoButton.formatted("Add to collection"));
+            waitForShortTime();
             waitForElementVisible(userProfilePhotoAddCollectionModalByName.formatted(collectionName));
             click(userProfilePhotoAddCollectionModalByName.formatted(collectionName));
         }
@@ -60,8 +70,10 @@ public class UnsplashPhotosPage extends ActionManager {
     }
 
     public UnsplashPhotosPage hoverToUserProfilePictureAndClickFollowButton() throws InterruptedException {
+        waitForShortTime();
         waitForElementVisible(userProfilePhotoModal);
         mouseHoverToElement(userProfilePhotoPicture);
+        waitForShortTime();
         waitForElementClickable(menuHeaderPhotoButton.formatted("Follow"));
         click(menuHeaderPhotoButton.formatted("Follow"));
         return this;
@@ -89,6 +101,13 @@ public class UnsplashPhotosPage extends ActionManager {
         waitForElementVisible(userProfilePhotoInputByName.formatted("title"));
         sendKeys(userProfilePhotoInputByName.formatted("title"),titleValue);
         click(userProfilePhotoInputByName.formatted("privacy"));
+        return this;
+    }
+
+    public UnsplashPhotosPage clickLinkButtonInPageWithName(String linkButton) throws InterruptedException {
+        waitForElementClickable(userProfilePhotoMenuLinkButtonByName.formatted(linkButton));
+        click(userProfilePhotoMenuLinkButtonByName.formatted(linkButton));
+        waitForMediumTime();
         return this;
     }
 

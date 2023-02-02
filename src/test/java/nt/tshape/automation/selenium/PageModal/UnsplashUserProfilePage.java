@@ -1,5 +1,6 @@
 package nt.tshape.automation.selenium.PageModal;
 
+import lombok.SneakyThrows;
 import nt.tshape.automation.config.ConfigLoader;
 import nt.tshape.automation.selenium.ActionManager;
 import nt.tshape.automation.selenium.TestContext;
@@ -29,7 +30,9 @@ public class UnsplashUserProfilePage extends ActionManager {
         openUrl("https://unsplash.com/@"+usernameValue);
         return this;
     }
+    @SneakyThrows
     public UnsplashUserProfilePage clickEditProfileButtonByName(String buttonName){
+        waitForShortTime();
         waitForElementVisible(buttonEditProfileByName.formatted(buttonName));
         click(buttonEditProfileByName.formatted(buttonName));
         return this;
