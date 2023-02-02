@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import nt.tshape.automation.apimanager.UniversalEndpoint;
 import nt.tshape.automation.config.ConfigLoader;
 import nt.tshape.automation.selenium.DataModel.PhotoDataModel;
-import nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Following.UsernameFollowingEndpoint;
 import nt.tshape.automation.selenium.TestContext;
 
 import java.util.ArrayList;

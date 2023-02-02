@@ -6,6 +6,7 @@ import nt.tshape.automation.selenium.Endpoint.Unsplash.Collections.CollectionsEn
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Collections.Id.CollectionIdEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Collections.Id.Remove.CollectionIdRemoveEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Me.MeEndpoint;
+import nt.tshape.automation.selenium.Endpoint.Unsplash.Oauth.Token.OauthTokenEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Photos.Id.Like.PhotoIdLikeEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Photos.Random.PhotoRandomEndpoint;
 import nt.tshape.automation.selenium.Endpoint.Unsplash.Users.Username.Collections.UsernameCollectionsEndpoint;
@@ -22,26 +23,50 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
 
     @SneakyThrows
     @Test(alwaysRun = true)
+    public void GetUserAccessToken(){
+        UnsplashOauthApplicationsPage unsplashOauthApplicationsPage = new UnsplashOauthApplicationsPage(getDriver(), getTestContext());
+        OauthTokenEndpoint oauthTokenEndpoint = new OauthTokenEndpoint(getTestContext());
+        UnsplashHomePage unsplashHomePage = new UnsplashHomePage(getDriver(),getTestContext());
+        MeEndpoint meEndpoint = new MeEndpoint(getTestContext());
+
+        unsplashHomePage
+                .openUnsplashHomePage()
+                .clickMenuButtonByName("Log in")
+                .openUnsplashLoginPage()
+                .loginWithUsernameAndPasswordAndReturnToHomePage(ConfigLoader.getEnvironment("unsplashEmail"),
+                        ConfigLoader.getEnvironment("unsplashPassword"), unsplashHomePage)
+                .clickUserProfileButtonByTitle("View more links")
+                .clickUserProfileViewMoreLinkSubMenuItem("Developers/API")
+                .clickMenuButtonByName("Your apps");
+        unsplashOauthApplicationsPage
+                .clickOnApplicationCardByName("LinhPhamExercise")
+                .moveToFieldAndGetDataByName("access_key")
+                .moveToFieldAndGetDataByName("secret_key")
+                .clickOnAuthorizeLinkThenGetAuthorizationCode();
+        oauthTokenEndpoint.callPOSTRequestToCreateNewAccessToken();
+        meEndpoint.callPUTRequestToRestoreUserNameToDefaultValue();
+    }
+
+    @SneakyThrows
+    @Test(alwaysRun = true)
     public void Scenario_1_Follow_A_Photographer_Successfully() {
         UsernameFollowingEndpoint usernameFollowingEndpoint = new UsernameFollowingEndpoint(getTestContext());
         UsersFollowEndpoint usersFollowEndpoint = new UsersFollowEndpoint(getTestContext());
         UnsplashHomePage unsplashHomePage = new UnsplashHomePage(getDriver(), getTestContext());
         UnsplashPhotosPage unsplashPhotosPage = new UnsplashPhotosPage(getDriver(), getTestContext());
-        MeEndpoint meEndpoint = new MeEndpoint(getTestContext());
+
 
         //Precondition
-        meEndpoint.callPUTRequestToRestoreUserNameToDefaultValue();
         usernameFollowingEndpoint
                 .callGETRequestToFollowingEndpointToGetListOfFollowings()
                 .verifyUsernameFollowingResponseCodeShouldBe(200);
-
         usersFollowEndpoint
                 .callDELETERequestsToUserFollowEndpointToUnfollowAll();
 
         //Start Testing
         unsplashHomePage
                 .openUnsplashHomePage()
-                .clickLoginButton()
+                .clickMenuButtonByName("Log in")
                 .openUnsplashLoginPage()
                 .verifyLoginPageTitleDisplayCorrect("Login | Unsplash")
                 .loginWithUsernameAndPasswordAndReturnToHomePage(ConfigLoader.getEnvironment("unsplashEmail"),
@@ -65,12 +90,12 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
         //Start Testing
         unsplashHomePage
                 .openUnsplashHomePage()
-                .clickLoginButton()
+                .clickMenuButtonByName("Log in")
                 .openUnsplashLoginPage()
                 .verifyLoginPageTitleDisplayCorrect("Login | Unsplash")
                 .loginWithUsernameAndPasswordAndReturnToHomePage(ConfigLoader.getEnvironment("unsplashEmail"),
                         ConfigLoader.getEnvironment("unsplashPassword"), unsplashHomePage)
-                .clickUserProfileButton()
+                .clickUserProfileButtonByTitle("Your personal menu button")
                 .clickUserProfileSubMenuName("View profile");
 
         unsplashUserProfilePage
@@ -106,7 +131,7 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
         //Start Testing
         unsplashHomePage
                 .openUnsplashHomePage()
-                .clickLoginButton()
+                .clickMenuButtonByName("Log in")
                 .openUnsplashLoginPage()
                 .verifyLoginPageTitleDisplayCorrect("Login | Unsplash")
                 .loginWithUsernameAndPasswordAndReturnToHomePage(ConfigLoader.getEnvironment("unsplashEmail"),
@@ -141,7 +166,7 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
         //Start Testing
         unsplashHomePage
                 .openUnsplashHomePage()
-                .clickLoginButton()
+                .clickMenuButtonByName("Log in")
                 .openUnsplashLoginPage()
                 .verifyLoginPageTitleDisplayCorrect("Login | Unsplash")
                 .loginWithUsernameAndPasswordAndReturnToHomePage(ConfigLoader.getEnvironment("unsplashEmail"),
@@ -176,7 +201,7 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
         UnsplashPhotosPage unsplashPhotosPage = new UnsplashPhotosPage(getDriver(), getTestContext());
         UnsplashAccountPage unsplashAccountPage = new UnsplashAccountPage(getDriver(), getTestContext());
         UnsplashUserProfilePage unsplashUserProfilePage = new UnsplashUserProfilePage(getDriver(), getTestContext());
-        UnsplashAccountHistoryPage unsplashAccountHistoryPage = new UnsplashAccountHistoryPage(getDriver(),getTestContext());
+        UnsplashAccountHistoryPage unsplashAccountHistoryPage = new UnsplashAccountHistoryPage(getDriver(), getTestContext());
 
         //Precondition
         photoRandomEndpoint.sendGETRequestToPhotoRandomEndpointToGetListOfPhotos(1);
@@ -184,7 +209,7 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
         //Start Testing
         unsplashHomePage
                 .openUnsplashHomePage()
-                .clickLoginButton()
+                .clickMenuButtonByName("Log in")
                 .openUnsplashLoginPage()
                 .verifyLoginPageTitleDisplayCorrect("Login | Unsplash")
                 .loginWithUsernameAndPasswordAndReturnToHomePage(ConfigLoader.getEnvironment("unsplashEmail"),
@@ -196,7 +221,7 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
                 .clickLinkButtonInPageWithName("Download");
 
         unsplashHomePage
-                .clickUserProfileButton()
+                .clickUserProfileButtonByTitle("Your personal menu button")
                 .clickUserProfileSubMenuName("View profile");
 
         unsplashUserProfilePage.clickEditProfileButtonByName("Edit Tags");

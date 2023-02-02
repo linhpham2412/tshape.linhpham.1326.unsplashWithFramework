@@ -1,11 +1,10 @@
 package nt.tshape.automation.selenium.PageModal;
 
+import lombok.SneakyThrows;
 import nt.tshape.automation.config.ConfigLoader;
 import nt.tshape.automation.selenium.ActionManager;
 import nt.tshape.automation.selenium.TestContext;
 import org.openqa.selenium.WebDriver;
-
-import java.io.IOException;
 
 public class UnsplashHomePage extends ActionManager {
 
@@ -18,10 +17,9 @@ public class UnsplashHomePage extends ActionManager {
     //Locator
     private final String headerMenuButtonByName = "xpath=//a[contains(text(),'%s')]";
     private final String imageBlock = "xpath=//figure[(@itemprop='image')]";
-
     private final String userProfileButtonByTitle = "xpath=//button[contains(@title,'%s')]";
     private final String userProfileSubMenuByName = "xpath=//div[contains(@role,'menu')]//a[contains(text(),'%s')]";
-
+    private final String userProfileViewMoreLinkMenuItemByName = "xpath=//details//*[text()='%s']";
 
     //Function
     public UnsplashHomePage openUnsplashHomePage(){
@@ -29,7 +27,7 @@ public class UnsplashHomePage extends ActionManager {
         return this;
     }
 
-    public UnsplashLoginPage clickLoginButton(){
+    public UnsplashLoginPage clickMenuButtonByName(String menuName){
         waitForElementClickable(headerMenuButtonByName.formatted("Log in"));
         click(headerMenuButtonByName.formatted("Log in"));
         return new UnsplashLoginPage(driver,getTestContext());
@@ -41,9 +39,9 @@ public class UnsplashHomePage extends ActionManager {
         return this;
     }
 
-    public UnsplashHomePage clickUserProfileButton(){
-        waitForElementClickable(userProfileButtonByTitle.formatted("Your personal menu button"));
-        click(userProfileButtonByTitle.formatted("Your personal menu button"));
+    public UnsplashHomePage clickUserProfileButtonByTitle(String buttonTitle){
+        waitForElementClickable(userProfileButtonByTitle.formatted(buttonTitle));
+        click(userProfileButtonByTitle.formatted(buttonTitle));
         return this;
     }
 
@@ -53,6 +51,12 @@ public class UnsplashHomePage extends ActionManager {
         return this;
     }
 
+    @SneakyThrows
+    public UnsplashHomePage clickUserProfileViewMoreLinkSubMenuItem(String itemName){
+//        waitForElementVisible(userProfileViewMoreLinkMenuItemByName.formatted(itemName));
+        click(userProfileViewMoreLinkMenuItemByName.formatted(itemName));
+        return this;
+    }
 
 
     //Verify

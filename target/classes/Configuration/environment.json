@@ -5,7 +5,8 @@
     "apiHost": "https://reqres.in/",
     "unsplashURL": "https://unsplash.com/",
     "unsplashHost": "https://api.unsplash.com/",
-    "unsplashBearerToken": "CphXWVBqQv5Mh0jN8EBLPuUmZ7H1hLHTzQg4YIt8K0c",
+    "unsplashBearerToken": "UVbtiCG6hZ94tkQXj8M4tjuDMAMxG5sXI9PqqjPicwk",
+    "unsplashURI": "urn:ietf:wg:oauth:2.0:oob",
     "unsplashAccount": "linhpham2412",
     "unsplashEmail": "blue.linhpham2412@gmail.com",
     "unsplashPassword": "AutomationTesting102"

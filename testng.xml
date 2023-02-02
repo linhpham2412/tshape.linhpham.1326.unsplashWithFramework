@@ -7,11 +7,12 @@
         <classes>
             <class name="nt.tshape.automation.selenium.TestCase.Unsplash_Auto_Flow_">
                 <methods>
-                    <include name="Scenario_1_Follow_A_Photographer_Successfully"/>
-                    <include name="Scenario_2_Update_The_Username_URL_In_The_Profile_Page"/>
-                    <include name="Scenario_3_List_Of_Liked_Photos"/>
-                    <include name="Scenario_4_Remove_Photos_From_The_Collection_Successfully"/>
-                    <include name="Scenario_5_Download_Photo_Successfully"/>
+                    <include name="GetUserAccessToken"/>
+                    <exclude name="Scenario_1_Follow_A_Photographer_Successfully"/>
+                    <exclude name="Scenario_2_Update_The_Username_URL_In_The_Profile_Page"/>
+                    <exclude name="Scenario_3_List_Of_Liked_Photos"/>
+                    <exclude name="Scenario_4_Remove_Photos_From_The_Collection_Successfully"/>
+                    <exclude name="Scenario_5_Download_Photo_Successfully"/>
                 </methods>
             </class>
         </classes>

@@ -4,12 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nt.tshape.automation.selenium.ActionManager;
 import nt.tshape.automation.selenium.DataModel.PhotoDataModel;
-import nt.tshape.automation.selenium.Endpoint.Unsplash.Photos.Random.PhotoRandomEndpoint;
 import nt.tshape.automation.selenium.TestContext;
 import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UnsplashPhotosPage extends ActionManager {
