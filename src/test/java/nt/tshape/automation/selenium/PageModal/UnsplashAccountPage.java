@@ -14,6 +14,7 @@ public class UnsplashAccountPage extends ActionManager {
     //Locator
     private final String userNameTextField = "id=user_username";
     private final String profileButtonLocatorByName = "xpath=//input[contains(@class,'btn') and (@value='%s')]";
+    private final String linkButtonByName = "xpath=//a[text()='%s']";
 
     //Function
     public UnsplashAccountPage inputUserNameValue(String usernameValue){
@@ -26,6 +27,11 @@ public class UnsplashAccountPage extends ActionManager {
 
     public UnsplashAccountPage scrollToButtonNameAndClick(String buttonName){
         mouseMoveToElementAndClick(profileButtonLocatorByName.formatted(buttonName));
+        return this;
+    }
+    public UnsplashAccountPage clickOnLinkButtonByName(String buttonName){
+        waitForElementClickable(linkButtonByName.formatted(buttonName));
+        click(linkButtonByName.formatted(buttonName));
         return this;
     }
 }

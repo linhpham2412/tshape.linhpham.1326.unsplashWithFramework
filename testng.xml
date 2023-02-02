@@ -2,14 +2,15 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
     <test verbose="2" preserve-order="true"
-          name="C:/Users/Admin/git_repository/tshape.linhpham.1326.unsplashWithFramework/src/test/java/nt/tshape/automation/selenium/TestCase/Unsplash_Auto_Flow_.java">
+          name="C:/Users/linhpham/Documents/Git_Repository/tshape.linhpham.1326.unsplashWithFramework/src/test/java/nt/tshape/automation/selenium/TestCase/Unsplash_Auto_Flow_.java">
         <classes>
             <class name="nt.tshape.automation.selenium.TestCase.Unsplash_Auto_Flow_">
                 <methods>
-                    <exclude name="Scenario_1_Follow_A_Photographer_Successfully"/>
-                    <exclude name="Scenario_2_Update_The_Username_URL_In_The_Profile_Page"/>
-                    <exclude name="Scenario_3_List_Of_Liked_Photos"/>
+                    <include name="Scenario_1_Follow_A_Photographer_Successfully"/>
+                    <include name="Scenario_2_Update_The_Username_URL_In_The_Profile_Page"/>
+                    <include name="Scenario_3_List_Of_Liked_Photos"/>
                     <include name="Scenario_4_Remove_Photos_From_The_Collection_Successfully"/>
+                    <include name="Scenario_5_Download_Photo_Successfully"/>
                 </methods>
             </class>
         </classes>

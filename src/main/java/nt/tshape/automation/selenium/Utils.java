@@ -1,5 +1,6 @@
 package nt.tshape.automation.selenium;
 
+import java.io.File;
 import java.util.Random;
 
 public class Utils {
@@ -28,5 +29,13 @@ public class Utils {
     public static Boolean generateRandomTrueOrFalse() {
         Random random = new Random();
         return random.nextBoolean();
+    }
+    public static Boolean checkIfFileExistInLocation(String location, String fileName){
+        try {
+            File fileToCheck = new File(location+fileName);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

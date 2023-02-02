@@ -1,5 +1,6 @@
 package nt.tshape.automation.setup;
 
+import nt.tshape.automation.config.ConfigLoader;
 import nt.tshape.automation.reportmanager.HTMLReporter;
 import nt.tshape.automation.selenium.TestContext;
 import nt.tshape.automation.selenium.WebDriverManager;
@@ -30,9 +31,16 @@ public class WebDriverTestNGSetupBase {
     public void beforeSuiteSetUp() {
         HTMLReporter.initHTMLReporter("HTML_TestingReport.html", "HTMLReport_Test_Output_On_");
     }
-    @Parameters({"browser"})
+//    @Parameters({"browser"})
+//    @BeforeMethod
+//    public void beforeMethod(Method method, @Optional("chrome") String browser) throws MalformedURLException {
+//        WebDriverManager.iniDriver(browser);
+//        HTMLReporter.getHtmlReporter().createReportNode(method.getName(), method.toGenericString());
+//    }
+
     @BeforeMethod
-    public void beforeMethod(Method method, @Optional("chrome") String browser) throws MalformedURLException {
+    public void beforeMethod(Method method) throws MalformedURLException {
+        String browser = ConfigLoader.getEnvironment("browser");
         WebDriverManager.iniDriver(browser);
         HTMLReporter.getHtmlReporter().createReportNode(method.getName(), method.toGenericString());
     }
