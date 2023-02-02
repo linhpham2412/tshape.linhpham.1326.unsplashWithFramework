@@ -27,8 +27,10 @@ public class Unsplash_Auto_Flow_ extends WebDriverTestNGSetupBase {
         UsersFollowEndpoint usersFollowEndpoint = new UsersFollowEndpoint(getTestContext());
         UnsplashHomePage unsplashHomePage = new UnsplashHomePage(getDriver(), getTestContext());
         UnsplashPhotosPage unsplashPhotosPage = new UnsplashPhotosPage(getDriver(), getTestContext());
+        MeEndpoint meEndpoint = new MeEndpoint(getTestContext());
 
         //Precondition
+        meEndpoint.callPUTRequestToRestoreUserNameToDefaultValue();
         usernameFollowingEndpoint
                 .callGETRequestToFollowingEndpointToGetListOfFollowings()
                 .verifyUsernameFollowingResponseCodeShouldBe(200);

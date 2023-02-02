@@ -31,16 +31,10 @@ public class WebDriverTestNGSetupBase {
     public void beforeSuiteSetUp() {
         HTMLReporter.initHTMLReporter("HTML_TestingReport.html", "HTMLReport_Test_Output_On_");
     }
-//    @Parameters({"browser"})
-//    @BeforeMethod
-//    public void beforeMethod(Method method, @Optional("chrome") String browser) throws MalformedURLException {
-//        WebDriverManager.iniDriver(browser);
-//        HTMLReporter.getHtmlReporter().createReportNode(method.getName(), method.toGenericString());
-//    }
 
+    @Parameters({"browser"})
     @BeforeMethod
-    public void beforeMethod(Method method) throws MalformedURLException {
-        String browser = ConfigLoader.getEnvironment("browser");
+    public void beforeMethod(Method method, @Optional("chrome") String browser) throws MalformedURLException {
         WebDriverManager.iniDriver(browser);
         HTMLReporter.getHtmlReporter().createReportNode(method.getName(), method.toGenericString());
     }

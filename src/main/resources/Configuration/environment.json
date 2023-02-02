@@ -1,7 +1,6 @@
 {
   "environment": "dev",
   "dev": {
-    "browser": "chrome",
     "url": "https://www.saucedemo.com/inventory.html",
     "apiHost": "https://reqres.in/",
     "unsplashURL": "https://unsplash.com/",
